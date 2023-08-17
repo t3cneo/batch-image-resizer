@@ -37,7 +37,7 @@ while read dir
 			then
 				printf "\n\nBIGGER THAN EXPECTED\nBefore: $width x $height\n$dir\n"
 				permission=$(find "$dir" -printf "%u:%g")
-				mogrify -resize 50% -quality 90 "$dir"
+				mogrify -geometry "$max" -quality 90 "$dir"
 				chown $permission "$dir"
 				echo 'After:' $(identify -format "%w x %h" "$dir")
 		fi
