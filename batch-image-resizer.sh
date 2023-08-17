@@ -10,11 +10,12 @@ helpFunction()
    exit 1
 }
 
-while getopts "d:s:" opt
+while getopts "d:s:q:" opt
 do
    case "$opt" in
       d ) directory="$OPTARG" ;;
       s ) max="$OPTARG" ;;
+      q ) quality="$OPTARG" ;;
       ? ) helpFunction ;;
    esac
 done
@@ -23,6 +24,12 @@ if [ -z "$directory" ] || [ -z "$max" ]
 then
    printf "Some of the parameters are empty";
    helpFunction
+fi
+
+if [ -z "$quality" ]
+then
+   printf "\nQuality not provided, defaut to 90\n";
+   quality=90
 fi
 
 # the extensions
@@ -37,7 +44,7 @@ while read dir
 			then
 				printf "\n\nBIGGER THAN EXPECTED\nBefore: $width x $height\n$dir\n"
 				permission=$(find "$dir" -printf "%u:%g")
-				mogrify -geometry "$max" -quality 90 "$dir"
+				mogrify -geometry "$max" -quality "$quality" "$dir"
 				chown $permission "$dir"
 				echo 'After:' $(identify -format "%w x %h" "$dir")
 		fi
