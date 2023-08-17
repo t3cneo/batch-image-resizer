@@ -37,16 +37,19 @@ extensions=".*\(jpg\|png\|jpeg\)$"
 
 find "$directory" -regex "$extensions" | 
 while read dir
-	do
-		width=$(identify -format "%w" "$dir")
-		height=$(identify -format "%h" "$dir")
-		if [ \( $width -gt $max \) -o \( $height -gt $max \) ]
-			then
-				printf "\n\nBIGGER THAN EXPECTED\nBefore: $width x $height\n$dir\n"
-				permission=$(find "$dir" -printf "%u:%g")
-				mogrify -geometry "$max" -quality "$quality" "$dir"
-				chown $permission "$dir"
-				echo 'After:' $(identify -format "%w x %h" "$dir")
-		fi
+   do
+      width=$(identify -format "%w" "$dir")
+      height=$(identify -format "%h" "$dir")
+         if [ \( $width -gt $max \) -o \( $height -gt $max \) ]
+	 then
+            printf "\n\nBIGGER THAN EXPECTED\nBefore: $width x $height\n$dir\n"
+	    permission=$(find "$dir" -printf "%u:%g")
+            mogrify -geometry "$max" -quality "$quality" "$dir"
+	    chown $permission "$dir"
+            echo 'After:' $(identify -format "%w x %h" "$dir")
+	 else
+            printf "\nBELOW THRESHOLD\nResolution: $width x $height\n$dir\nfile not modified\n\n"
+	 fi
 done
 
+printf "ALL DONE\n$directory directory fully parsed and processed\n\n"
