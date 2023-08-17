@@ -52,4 +52,4 @@ while read dir
 	 fi
 done
 
-printf "ALL DONE\n$directory directory fully parsed and processed\n\n"
+printf "\nALL DONE\n$directory directory fully parsed and processed\n\n"
